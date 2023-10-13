@@ -1,5 +1,5 @@
 import threading
-import DoBotArm as Dbt
+from DoBotArm import DoBotArm as Dbt
 import time
 from serial.tools import list_ports
 from abc import ABC, abstractmethod
@@ -43,7 +43,7 @@ class RoboticArm(ABC):
 def main():
     port = port_selection()
     if homing_prompt():
-        homeX, homeY, homeZ = 200, 0, 50
+        homeX, homeY, homeZ = 200, 0, 10
         print("Connecting")
         print("Homing")
         ctrlBot = Dbt.DoBotArm(port, homeX, homeY, homeZ, home = True) #Create DoBot Class Object with home position x,y,z
