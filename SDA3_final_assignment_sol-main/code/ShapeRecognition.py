@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 frame_width,frame_height = 1920,1080
-vid_capture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
+vid_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 fps = 60
 

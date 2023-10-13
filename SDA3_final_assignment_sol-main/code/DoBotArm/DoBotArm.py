@@ -3,7 +3,7 @@
 
 import sys
 sys.path.insert(1,'./DLL')
-import DobotDllType as dType
+from DoBotArm import DobotDllType as dType
 import time
 
 

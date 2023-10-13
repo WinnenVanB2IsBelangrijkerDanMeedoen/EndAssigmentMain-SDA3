@@ -1,5 +1,5 @@
 import threading
-import DoBotArm as Dbt
+from DoBotArm import DoBotArm as Dbt
 import time
 from serial.tools import list_ports
 from abc import ABC, abstractmethod
