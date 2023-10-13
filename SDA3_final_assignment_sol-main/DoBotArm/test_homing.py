@@ -6,7 +6,7 @@ from serial.tools import list_ports
 def port_selection():
     # Choosing port
     available_ports = list_ports.comports()
-    print('Available COM-ports:')
+    print('Available COM-ports0:')
     for i, port in enumerate(available_ports):
         print(f"  {i}: {port.description}")
 

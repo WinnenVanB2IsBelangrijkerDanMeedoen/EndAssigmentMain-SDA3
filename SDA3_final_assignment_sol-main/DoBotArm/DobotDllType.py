@@ -1,6 +1,7 @@
 from ctypes import *
 import time,  platform
 import os
+import math
 
 def enum(**enums):
     return type("Enum", (), enums)
