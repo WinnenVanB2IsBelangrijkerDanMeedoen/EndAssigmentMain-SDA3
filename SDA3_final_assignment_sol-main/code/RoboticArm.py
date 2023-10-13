@@ -43,10 +43,14 @@ class RoboticArm(ABC):
 def main():
     port = port_selection()
     if homing_prompt():
-        homeX, homeY, homeZ = 200, 0, 10
+        homeX, homeY, homeZ = 200, 0, 20
         print("Connecting")
         print("Homing")
         ctrlBot = Dbt.DoBotArm(port, homeX, homeY, homeZ, home = True) #Create DoBot Class Object with home position x,y,z
+    
+    if homing_prompt():
+        Dbt.moveHome(homeX, homeY, homeZ)
+
 
 if __name__ == "__main__":
     main()
