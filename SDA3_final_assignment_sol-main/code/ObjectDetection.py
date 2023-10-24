@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 show = False
 vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
-
+coordinates = []
 frameWidth = int(vidCapture.get(3))
 frameHeight = int(vidCapture.get(4))
 frameSize = (frameWidth, frameHeight)
@@ -95,7 +95,11 @@ while(vidCapture.isOpened()):
                     if moment["m00"] != 0:
                         cX = int(moment["m10"]/moment["m00"]) #center X coordinate
                         cY = int(moment["m01"]/moment["m00"]) #center Y coordinate
+                    else:
+                        cX, cY = 0, 0                    
+  
                     cv2.circle(image_copyresult, (cX, cY), 5, (0, 255, 255), -1)
+
     cv2.drawContours(image=image_copyresult, contours=contoursresult, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
     cv2.imshow('result', image_copyresult)
     #cv2.imshow('reuslt2HSV', resultBlueGreenRedYellow)
