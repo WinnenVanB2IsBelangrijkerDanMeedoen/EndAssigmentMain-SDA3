@@ -2,11 +2,10 @@ import cv2
 import numpy as np
 show = False
 vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
-fps = 60
 
-framwWidth = int(vidCapture.get(3))
-framHeight = int(vidCapture.get(4))
-frameSize = (framwWidth, framHeight)
+frameWidth = int(vidCapture.get(3))
+frameHeight = int(vidCapture.get(4))
+frameSize = (frameWidth, frameHeight)
 
 #yellow
 minHSVYellow = np.array([18, 160, 0])
@@ -35,8 +34,6 @@ def MergeImage(image1, image2):
 while(vidCapture.isOpened()):
     ret, frame = vidCapture.read()
     if ret == True:
-        frame = cv2.GaussianBlur(frame, (3,3), 0)
-
         #Red detection
         imageHSVRed = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
         maskHSVRed = cv2.inRange(imageHSVRed, minHSVRed, maxHSVRed)
@@ -82,16 +79,27 @@ while(vidCapture.isOpened()):
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         dilate = cv2.dilate(edged, kernel, iterations=1) # zorgt ervoor dat er verbindgen zijn tussen de randen
         #find countours
-        contoursresult, hierarchyresult = cv2.findContours(image = dilate, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
+        contoursresult, _ = cv2.findContours(image = dilate, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
         image_copyresult = frame.copy()
-        cv2.drawContours(image=image_copyresult, contours=contoursresult, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
-        cv2.imshow('result', image_copyresult)
-        #cv2.imshow('reuslt2HSV', resultBlueGreenRedYellow)
-        k = cv2.waitKey(20)
-        if k == 113:
-            break
-    else:
+        #Calculate contour center
+        frameSize = (frame.shape[1], frame.shape[0])
+        borderMargin = 10
+    for contour in contoursresult:
+        area = cv2.contourArea(contour)
+        if 5000 > area > 400:
+            if len(contour) > 0:
+                x, y = contour[0][0]
+                if borderMargin <= x < frameWidth - borderMargin:
+                    moment = cv2.moments(contour)
+                    #calculating centroid
+                    if moment["m00"] != 0:
+                        cX = int(moment["m10"]/moment["m00"]) #center X coordinate
+                        cY = int(moment["m01"]/moment["m00"]) #center Y coordinate
+                    cv2.circle(image_copyresult, (cX, cY), 5, (0, 255, 255), -1)
+    cv2.drawContours(image=image_copyresult, contours=contoursresult, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+    cv2.imshow('result', image_copyresult)
+    #cv2.imshow('reuslt2HSV', resultBlueGreenRedYellow)
+    k = cv2.waitKey(20)
+    if k == ord("q"):
+        cv2.destroyAllWindows()
         break
-
-vidCapture.release()
-cv2.destroyAllWindows()
