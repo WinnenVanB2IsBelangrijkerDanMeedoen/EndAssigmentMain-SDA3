@@ -63,7 +63,7 @@ while vid_capture.isOpened():
     frame = frame[140:400, 100:370]
     if ret:
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        ret, thresh = cv2.threshold(gray_frame, 100, 150, 0)
+        ret, thresh = cv2.threshold(gray_frame, 80, 255, 0)
 
         cv2.imshow('tresh', thresh)
         
