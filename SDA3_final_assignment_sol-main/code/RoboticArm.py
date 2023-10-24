@@ -42,15 +42,31 @@ class RoboticArm(ABC):
 
 def main():
     port = port_selection()
-    if homing_prompt():
-        homeX, homeY, homeZ = 200, 0, 20
-        print("Connecting")
-        print("Homing")
-        ctrlBot = Dbt.DoBotArm(port, homeX, homeY, homeZ, home = True) #Create DoBot Class Object with home position x,y,z
+    homing_prompt()
+    homeX, homeY, homeZ = 200, 0, 20
+    print("Connecting")
+    print("Homing")
+    ctrlBot = Dbt.DoBotArm(port, homeX, homeY, homeZ) #Create DoBot Class Object with home position x,y,z
+    # position = ctrlBot.getPosition()
+    # print("Current Location Nozzle: ", position[0], position[1], position[2])
+    # homing_prompt()
+    # time.sleep(2)
+    # ctrlBot.moveArmRelXY(0,100,wait=False)
+    # print(ctrlBot.getPosition())
+    # if homing_prompt():
+    #     Dbt.moveHome()
+    ctrlBot.moveArmRelXY(0, 20) #deze slaat hij voor een of andere manier over
+
+    ctrlBot.moveArmXY(200,-150,20)
+    print(ctrlBot.getPosition())
+    while(True):
+        True
     
-    if homing_prompt():
-        Dbt.moveHome(homeX, homeY, homeZ)
+    print("klaar")
 
 
 if __name__ == "__main__":
     main()
+
+
+ 
