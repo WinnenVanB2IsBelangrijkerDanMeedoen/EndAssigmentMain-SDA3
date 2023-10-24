@@ -1,20 +1,17 @@
 import cv2
 import numpy as np
 frame_width,frame_height = 1920,1080
-vid_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+vid_capture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
 
 fps = 60
 
 
 color_list = [
-        ['red', [0, 160, 70], [10, 250, 250]],
-        ['pink', [0, 50, 70], [10, 160, 250]],
-        ['yellow', [15, 50, 70], [30, 250, 250]],
-        ['green', [40, 50, 70], [70, 250, 250]],
-        ['cyan', [80, 50, 70], [90, 250, 250]],
-        ['blue', [100, 50, 70], [130, 250, 250]],
-        ['purple', [140, 50, 70], [160, 250, 250]],
-        ['red', [170, 50, 70], [180, 160, 250]],
+        ['red', [0, 160, 70], [10, 250, 255]],
+        ['green', [40, 50, 70], [70, 255, 255]],
+        ['yellow', [15, 50, 70], [30, 255, 255]],
+        ['blue', [100, 50, 70], [130, 255, 255]],
+        ['red', [170, 50, 70], [180, 160, 255]],
     ]
 coordinates = []
 
@@ -30,17 +27,13 @@ def get_color_hsv(frame, x, y):
         lower_bound = np.array(lower)
         upper_bound = np.array(upper)
         pixel_color = np.array([h, s, v])
-
         if (lower_bound <= pixel_color).all() and (pixel_color <= upper_bound).all():
             return color_name
-
     return "Unknown"
-
 
 def detect_shape(contour):
     epsilon = 0.04 * cv2.arcLength(contour, True)
     approx = cv2.approxPolyDP(contour, epsilon, True)
-
     circularity = 4 * np.pi * cv2.contourArea(contour) / (cv2.arcLength(contour, True) ** 2)
     area = cv2.contourArea(contour)
 
@@ -65,38 +58,26 @@ def detect_shape(contour):
         else:
             return "Unknown"
 
-
-
 while vid_capture.isOpened():
     ret, frame = vid_capture.read()
     frame = frame[140:400, 100:370]
     if ret:
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # gray_frame = cv2.bilateralFilter(src = gray_frame, d = 9, sigmaColor=75, sigmaSpace=75)
-        ret, thresh = cv2.threshold(gray_frame, 110, 255, 0)
+        ret, thresh = cv2.threshold(gray_frame, 80, 255, 0)
 
         cv2.imshow('tresh', thresh)
-
         
         contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
         frame_width, frame_height = frame.shape[1], frame.shape[0] #return witdh and height of the video
         border_margin = 10  # Adjust this margin as needed
-        
-
         shape_count = {"Triangle": 0, "Quadrilateral": 0, "Pentagon": 0, "Hexagon": 0, "Circle": 0, "Unknown": 0}
-
-        
-
         for contour in contours:
             area = cv2.contourArea(contour)
-            if area > 400:
+            if 5000> area > 400:
                 if len(contour) > 0:
                     x, y = contour[0][0]
-
                     if border_margin <= x < frame_width - border_margin and border_margin <= y < frame_height - border_margin:
-                        shape = detect_shape(contour)
-                        
+                        shape = detect_shape(contour)     
                         # Check if the shape is in the dictionary before incrementing
                         if shape in shape_count:
                             shape_count[shape] += 1
@@ -116,28 +97,17 @@ while vid_capture.isOpened():
 
                         coordinates.append(shape_data)
                         color = get_color_hsv(frame, cX, cY)
-                        cv2.circle(frame, (cX, cY), 5, (0, 255, 255), -1)                      
-                        
-                        cv2.putText(frame, f"{color} {shape}", (cX - 50, cY - 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2) 
-
-                        cv2.drawContours(frame, [contour], -1, (0, 0, 255), 2)
-                        
-        
-
-        
-
-        # down_scale = 0.8
-        # scaled_down = cv2.resize(frame, None, fx=down_scale, fy=down_scale, interpolation=cv2.INTER_LINEAR)
+                        cv2.circle(frame, (cX, cY), 5, (0, 255, 255), -1) 
+                        epsilon = 0.04 * cv2.arcLength(contour, True)
+                        approx = cv2.approxPolyDP(contour, epsilon, True)
+                        cv2.putText(frame, f"{color} {shape}", (approx[0][0][0]-40, approx[0][0][1]-8), cv2.FONT_HERSHEY_DUPLEX, 0.4, (0, 255, 0), 1)
+                        cv2.drawContours(frame, [contour], -1, (0, 0, 255), 2)       
         cv2.imshow("Image", frame)
-        # cv2.imshow("binary", thresh)
-
 
         key = cv2.waitKey(20)
         if key == ord('q'):
             break
     else:
         break
-
-
 vid_capture.release()
 cv2.destroyAllWindows()
