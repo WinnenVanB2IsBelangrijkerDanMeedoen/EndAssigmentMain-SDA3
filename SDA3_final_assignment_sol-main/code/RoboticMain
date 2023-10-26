@@ -9,7 +9,7 @@ def main():
     os.chdir(path= 'SDA3_final_assignment_sol-main/code/DoBotArm') 
     port = port_selection()
     homeCoordinates = (5, 145, 60)
-    ctrlBot = LoadingRobot(homeCoordinates, True)
+    ctrlBot = LoadingRobot(homeCoordinates) #sending homeCoordinates will initialize object to roboticarm
     # position = ctrlBot.getPosition()
     # print("Current Location Nozzle: ", position[0], position[1], position[2])
     # homing_prompt()

@@ -11,7 +11,7 @@ def port_selection():
     for i, port in enumerate(available_ports):
         print(f"  {i}: {port.description}")
 
-    choice = 0#int(input('Choose port by typing a number followed by [Enter]: '))
+    choice = int(input('Choose port by typing a number followed by [Enter]: '))
     return available_ports[choice].device
 
 def homing_prompt():
@@ -25,12 +25,17 @@ def homing_prompt():
             print("Unrecognised response")
 
 class RoboticArm(ABC):
-    def __init__(self, homing, homeCoordinates):
-        if homing:
+    def __init__(self, homeCoordinates):
+        if homeCoordinates != (None, None, None):
             print("Connecting...")
             port = port_selection()
             self.ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
+            ctrlBot = self.ctrlBot
+            return ctrlBot
 
+    @abstractmethod
+    def Initialize():
+        raise NotImplementedError
 
     @abstractmethod
     def PickUp():
