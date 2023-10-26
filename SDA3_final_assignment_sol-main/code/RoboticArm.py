@@ -1,6 +1,5 @@
 import threading
 from DoBotArm import DoBotArm as Dbt
-import time
 from serial.tools import list_ports
 from abc import ABC, abstractmethod
 
@@ -11,7 +10,7 @@ def port_selection():
     for i, port in enumerate(available_ports):
         print(f"  {i}: {port.description}")
 
-    choice = int(input('Choose port by typing a number followed by [Enter]: '))
+    choice = 0#int(input('Choose port by typing a number followed by [Enter]: '))
     return available_ports[choice].device
 
 def homing_prompt():
@@ -25,8 +24,12 @@ def homing_prompt():
             print("Unrecognised response")
 
 class RoboticArm(ABC):
-    def __init__(self):
-        print("Disconnecting")
+    def __init__(self, homing, homeCoordinates):
+        if homing:
+            print("Connecting...")
+            port = port_selection()
+            self.ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
+
 
     @abstractmethod
     def PickUp():
@@ -35,38 +38,14 @@ class RoboticArm(ABC):
     @abstractmethod
     def PlaceDown():
         raise NotImplementedError
+    
+    @abstractmethod
+    def ConveyorBelt():
+        raise NotImplementedError
 
     @abstractmethod
     def CoordinateCalculation():
         raise NotImplementedError
-
-def main():
-    port = port_selection()
-    homing_prompt()
-    homeX, homeY, homeZ = 200, 0, 20
-    print("Connecting")
-    print("Homing")
-    ctrlBot = Dbt.DoBotArm(port, homeX, homeY, homeZ) #Create DoBot Class Object with home position x,y,z
-    # position = ctrlBot.getPosition()
-    # print("Current Location Nozzle: ", position[0], position[1], position[2])
-    # homing_prompt()
-    # time.sleep(2)
-    # ctrlBot.moveArmRelXY(0,100,wait=False)
-    # print(ctrlBot.getPosition())
-    # if homing_prompt():
-    #     Dbt.moveHome()
-    ctrlBot.moveArmRelXY(0, 20) #deze slaat hij voor een of andere manier over
-
-    ctrlBot.moveArmXY(200,-150,20)
-    print(ctrlBot.getPosition())
-    while(True):
-        True
-    
-    print("klaar")
-
-
-if __name__ == "__main__":
-    main()
 
 
  

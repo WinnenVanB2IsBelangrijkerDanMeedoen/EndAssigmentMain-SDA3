@@ -1,0 +1,36 @@
+from LoadingRobot import *
+import time
+import os
+import keyboard
+
+
+
+def main():
+    os.chdir(path= 'SDA3_final_assignment_sol-main/code/DoBotArm') 
+    port = port_selection()
+    homeCoordinates = (5, 145, 60)
+    ctrlBot = LoadingRobot(homeCoordinates, True)
+    # position = ctrlBot.getPosition()
+    # print("Current Location Nozzle: ", position[0], position[1], position[2])
+    # homing_prompt()
+    # time.sleep(2)
+    # ctrlBot.moveArmRelXY(0,100,wait=False)
+    # print(ctrlBot.getPosition())
+    # if homing_prompt():
+    #     Dbt.moveHome()
+    ctrlBot.moveArmRelXY(0, 0, wait=True) #deze slaat hij voor een of andere manier over
+    print(ctrlBot.getPosition())
+    ctrlBot.moveArmXYZ(105,145,60, wait = True)
+    ctrlBot.pickToggle()
+    ctrlBot.moveArmXYZ(homeCoordinates, jump=True)
+    ctrlBot.pickToggle()
+    ctrlBot.SetConveyor(enabled=True)
+    #ctrlBot.toggleSuction()
+
+    while True:
+        if keyboard.is_pressed("esc"):
+            #ctrlBot.moveArmXYZ(z=60, wait=True)
+            break
+
+if __name__ == "__main__":
+    main()
