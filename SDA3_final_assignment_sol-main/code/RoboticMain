@@ -7,6 +7,8 @@ from DoBotArm import DoBotArm as Dbt
 from serial.tools import list_ports
 from abc import ABC, abstractmethod
 from ObjectDetection import *
+import tkinter as tk
+from userColorSelector import select_color
 
 
 def main():
@@ -21,7 +23,13 @@ def main():
     #     Dbt.moveHome()
 
 
-    roboticState = 'initialize'
+    roboticState = 'userColorChoice'
+    colorList = [("Blue"), ("Red"), ("Yellow"), ("Green")]
+    centerList = []
+
+    centerList.append(("Blue(B)", (30,60)))
+    centerList.append(("Red(R)", (70,140)))
+    centerList.append(("Yellow(G)", (200,400)))
 
     while True:
 
@@ -34,8 +42,20 @@ def main():
                 roboticState = 'pickUpPosition'
 
             case 'userColorChoice':
-                print("choose any of these colors: ")
-                input(colorList)
+                userChoice = select_color(colorList)
+                print(userChoice)
+                match userChoice:
+                    case 'Blue':
+                        pass
+
+                    case 'Green':
+                        pass
+
+                    case 'Red':
+                        pass
+
+                    case 'Yellow':
+                        pass
 
             case 'pickUp':
                 ctrlBot.pickToggle()
@@ -54,8 +74,7 @@ def main():
                 ctrlBot.moveArmXYZ(105,145,60, wait = True)
                 ctrlBot.SetConveyor(enabled=False)
                 roboticState = 'pickUp'
-
-        print(ctrlBot.getPosition())
+        #print(ctrlBot.getPosition())
         if keyboard.is_pressed("esc"):
             #ctrlBot.moveArmXYZ(z=60, wait=True)
             ctrlBot.SetConveyor(enabled=True)
