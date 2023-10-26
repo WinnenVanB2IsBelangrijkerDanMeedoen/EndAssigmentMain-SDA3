@@ -1,5 +1,6 @@
+import cv2
 from RoboticArm import *
-
+from ObjectDetection import *
 
 class LoadingRobot(RoboticArm):
     def __init__(self, homeCoordinates, homing=False):
@@ -25,6 +26,7 @@ class LoadingRobot(RoboticArm):
 
     def CoordinateCalculation():
         pass
+    
 frame = LoadingRobot.TrimFrame()
 LoadingRobot.PickupPlaceDetection(frame)
 
