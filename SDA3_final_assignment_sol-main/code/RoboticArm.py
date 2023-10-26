@@ -2,6 +2,7 @@ import threading
 from DoBotArm import DoBotArm as Dbt
 from serial.tools import list_ports
 from abc import ABC, abstractmethod
+from ObjectDetection import *
 
 def port_selection():
     # Choosing port
@@ -42,6 +43,13 @@ class RoboticArm(ABC):
     @abstractmethod
     def ConveyorBelt():
         raise NotImplementedError
+    
+    @abstractmethod
+    def PickUpPlaceDetection(self, resizedFrame):
+        vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
+        self.centerList, frame = ObjectDetection(resizedFrame)
+        cv2.imshow("VideoFeed", frame)
+        
 
     @abstractmethod
     def CoordinateCalculation():
