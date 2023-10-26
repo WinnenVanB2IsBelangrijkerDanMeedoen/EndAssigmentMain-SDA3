@@ -2,14 +2,18 @@ from LoadingRobot import *
 import time
 import os
 import keyboard
-
+import threading
+from DoBotArm import DoBotArm as Dbt
+from serial.tools import list_ports
+from abc import ABC, abstractmethod
+from ObjectDetection import *
 
 
 def main():
     os.chdir(path= 'SDA3_final_assignment_sol-main/code/DoBotArm') 
     port = port_selection()
     homeCoordinates = (5, 145, 60)
-    ctrlBot = LoadingRobot(homeCoordinates) #sending homeCoordinates will initialize object to roboticarm
+    ctrlBot = LoadingRobot.Initialize(homeCoordinates) #sending homeCoordinates will initialize object to roboticarm
     # position = ctrlBot.getPosition()
     # print("Current Location Nozzle: ", position[0], position[1], position[2])
     # homing_prompt()

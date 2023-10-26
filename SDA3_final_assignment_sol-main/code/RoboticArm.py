@@ -30,12 +30,6 @@ class RoboticArm(ABC):
             print("Connecting...")
             port = port_selection()
             self.ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
-            ctrlBot = self.ctrlBot
-            return ctrlBot
-
-    @abstractmethod
-    def Initialize():
-        raise NotImplementedError
 
     @abstractmethod
     def PickUp():
@@ -49,7 +43,7 @@ class RoboticArm(ABC):
     def ConveyorBelt():
         raise NotImplementedError
     
-    @abstractmethod
+
     def PickUpPlaceDetection(self, resizedFrame):
         vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
         self.centerList, frame = ObjectDetection(resizedFrame)
