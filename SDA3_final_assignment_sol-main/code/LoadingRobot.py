@@ -1,9 +1,8 @@
-import cv2
 from RoboticArm import *
-from ObjectDetection import *
+import cv2
 
 class LoadingRobot(RoboticArm):
-    def __init__(self, homeCoordinates = None):
+    def __init__(self):
         pass
 
     def initialize(self, homeCoordinates):
@@ -19,14 +18,12 @@ class LoadingRobot(RoboticArm):
         pass
 
     def PickupPlaceDetection(self, resizedFrame):
-        vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
-        centerList, frame = ObjectDetection(self.resizedFrame)
-        cv2.imshow("VideoFeed", frame)
-        return centerList
+        super().PickUpPlaceDetection(resizedFrame)
+        return self.centerList
 
     def CoordinateCalculation():
         pass
-
+    
 frame = LoadingRobot.TrimFrame()
 LoadingRobot.PickupPlaceDetection(frame)
 
