@@ -22,11 +22,11 @@ class LoadingRobot(RoboticArm):
         vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
         centerList, frame = ObjectDetection(self.resizedFrame)
         cv2.imshow("VideoFeed", frame)
-        pass
+        return centerList
 
     def CoordinateCalculation():
         pass
-    
+
 frame = LoadingRobot.TrimFrame()
 LoadingRobot.PickupPlaceDetection(frame)
 
