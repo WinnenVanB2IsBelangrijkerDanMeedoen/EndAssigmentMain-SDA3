@@ -29,11 +29,10 @@ def ResizeFrame():
                 yMax = yMin + 50
             frame = frame[xMin:xMax, yMin:yMax]
             cv2.imshow("ResizeFrame", frame)
-    
             key = cv2.waitKey(20)
             if key == ord("q"):
                 break
         else:
             break
     return frame
-cv2.destroyAllWindows()
+

@@ -29,8 +29,5 @@ class LoadingRobot(RoboticArm):
     def CoordinateCalculation():
         pass
     
-frame = LoadingRobot.TrimFrame()
-LoadingRobot.PickupPlaceDetection(frame)
-
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+#frame = LoadingRobot.TrimFrame()
+#LoadingRobot.PickupPlaceDetection(frame)

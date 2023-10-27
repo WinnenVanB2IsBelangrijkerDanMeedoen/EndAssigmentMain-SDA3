@@ -1,10 +1,10 @@
 import tkinter as tk
 
-def select_color(colorList):
+def selectColor(colorList):
     # Define the list of color names
 
     # Define a dictionary to map color names to their corresponding color codes
-    color_mapping = {
+    colorMapping = {
         "Red": "red",
         "Blue": "blue",
         "Yellow": "yellow",
@@ -12,8 +12,8 @@ def select_color(colorList):
     }
 
     # Function to handle button click
-    def on_button_click(color_name):
-        selected_color.set(color_name)
+    def onButtonClick(selectedColor):
+        selectedColor.set(selectedColor)
         root.quit()  # Close the app
 
     # Create the main application window
@@ -21,30 +21,30 @@ def select_color(colorList):
     root.title("Color Selector")
 
     # Create a StringVar to store the selected color
-    selected_color = tk.StringVar()
-    selected_color.set("")
+    selectedColor = tk.StringVar()
+    selectedColor.set("")
 
     # Create buttons for each color in the colorList list
-    for color_name in colorList:
-        if color_name in color_mapping:
-            color_code = color_mapping[color_name]
-            button = tk.Button(root, text=color_name, background=color_code, command=lambda c=color_name: on_button_click(c))
+    for selectedColor in colorList:
+        if selectedColor in colorMapping:
+            selectedColor = colorMapping[selectedColor]
+            button = tk.Button(root, text=selectedColor, background=selectedColor, command=lambda c=selectedColor: onButtonClick(c))
             button.pack()
 
     # Label to display the selected color
-    color_label = tk.Label(root, text="Selected Color: ", background="white")
-    color_label.pack()
+    colorLabel = tk.Label(root, text="Selected Color: ", background="white")
+    colorLabel.pack()
 
     # Label to display the selected color's name
-    color_name_label = tk.Label(root, textvariable=selected_color, background="white")
-    color_name_label.pack()
+    selectedColorLabel = tk.Label(root, textvariable=str(selectedColor), background="white")
+    selectedColorLabel.pack()
 
     # Start the GUI event loop
     root.mainloop()
 
     # When the GUI event loop ends, return the selected color
-    return selected_color.get()
+    return selectedColor.get()
 
 if __name__ == "__main__":
-    selected_color = select_color()
-    print("Selected color:", selected_color)
+    selectedColor = selectColor()
+    print("Selected color:", selectedColor)

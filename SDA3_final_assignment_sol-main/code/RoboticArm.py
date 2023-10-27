@@ -4,17 +4,17 @@ from serial.tools import list_ports
 from abc import ABC, abstractmethod
 from ObjectDetection import *
 
-def port_selection():
+def portSelection():
     # Choosing port
-    available_ports = list_ports.comports()
+    availablePorts = list_ports.comports()
     print('Available COM-ports0:')
-    for i, port in enumerate(available_ports):
+    for i, port in enumerate(availablePorts):
         print(f"  {i}: {port.description}")
 
     choice = 0 #int(input('Choose port by typing a number followed by [Enter]: '))
-    return available_ports[choice].device
+    return availablePorts[choice].device
 
-def homing_prompt():
+def homingPrompt():
     while (True):
         response = input("Do you wanna home? (y/n)")
         if(response == "y") :
