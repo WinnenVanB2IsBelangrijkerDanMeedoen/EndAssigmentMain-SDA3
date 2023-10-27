@@ -23,7 +23,7 @@ def main():
     #     Dbt.moveHome()
 
 
-    roboticState = 'userColorChoice'
+    roboticState = 'initialize'
     colorList = [("Blue"), ("Red"), ("Yellow"), ("Green")]
     centerList = []
 
@@ -39,7 +39,10 @@ def main():
                 homeCoordinates = (5, 135, 60)
                 ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = False) #Create DoBot Class Object with home position x,y,z
                 ctrlBot.moveArmRelXY(0, 0, wait=True) #deze slaat hij voor een of andere manier over
-                roboticState = 'pickUpPosition'
+                #Resize Frame and detect contours
+                resizedFrame = LoadingRobot.TrimFrame()
+                LoadingRobot.PickupPlaceDetection(resizedFrame)
+                roboticState = 'userColorChoice'
 
             case 'userColorChoice':
                 userChoice = selectColor(colorList)
