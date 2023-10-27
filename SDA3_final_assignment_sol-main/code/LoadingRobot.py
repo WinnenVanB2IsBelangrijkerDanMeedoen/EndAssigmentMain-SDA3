@@ -21,9 +21,10 @@ class LoadingRobot(RoboticArm):
         pass
 
     def PickupPlaceDetection(resizedFrame):
-        vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
-        centerlist, frame = ObjectDetection(vidCapture)
+        centerArr, colorArr, frame = ObjectDetection(resizedFrame)
         cv2.imshow("Videofeed", frame)
+        print(centerArr)
+        print(colorArr)
 
     def CoordinateCalculation():
         pass
