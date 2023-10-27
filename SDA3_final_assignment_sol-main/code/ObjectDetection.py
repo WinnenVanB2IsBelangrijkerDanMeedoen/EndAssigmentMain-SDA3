@@ -98,7 +98,7 @@ def ObjectDetection(vidCapture):
                 print(colorName)          
             cv2.circle(image_copyresult, (cX, cY), 5, (0, 255, 255), -1)
             cv2.putText(image_copyresult, colorName, (cX -25, cY -35), cv2.FONT_HERSHEY_DUPLEX, 0.4, (0, 255, 0), 1)
-            centerList.append(colorName, (cX,cY))
-            cv2.drawContours(image=image_copyresult, contours=contoursresult, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+            #centerList.append(colorName, (cX,cY))
+            cv2.drawContours(image=image_copyresult, contours=contour, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
     return centerList, image_copyresult
     #cv2.imshow('reuslt2HSV', resultBlueGreenRedYellow)
