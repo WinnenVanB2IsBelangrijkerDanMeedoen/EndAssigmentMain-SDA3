@@ -2,6 +2,7 @@ import threading
 from DoBotArm import DoBotArm as Dbt
 from serial.tools import list_ports
 from abc import ABC, abstractmethod
+from ObjectDetection import *
 
 def port_selection():
     # Choosing port
@@ -10,7 +11,7 @@ def port_selection():
     for i, port in enumerate(available_ports):
         print(f"  {i}: {port.description}")
 
-    choice = 0#int(input('Choose port by typing a number followed by [Enter]: '))
+    choice = 0 #int(input('Choose port by typing a number followed by [Enter]: '))
     return available_ports[choice].device
 
 def homing_prompt():
@@ -24,12 +25,8 @@ def homing_prompt():
             print("Unrecognised response")
 
 class RoboticArm(ABC):
-    def __init__(self, homing, homeCoordinates):
-        if homing:
-            print("Connecting...")
-            port = port_selection()
-            self.ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
-
+    def __init__(self, ctrlBot, homeCoordinates):
+        pass
 
     @abstractmethod
     def PickUp():
@@ -42,6 +39,13 @@ class RoboticArm(ABC):
     @abstractmethod
     def ConveyorBelt():
         raise NotImplementedError
+    
+
+    def PickUpPlaceDetection(self, resizedFrame):
+        vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
+        self.centerList, frame = ObjectDetection(resizedFrame)
+        cv2.imshow("VideoFeed", frame)
+        
 
     @abstractmethod
     def CoordinateCalculation():

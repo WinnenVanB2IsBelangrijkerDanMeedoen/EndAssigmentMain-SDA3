@@ -163,7 +163,7 @@ class DoBotArm:
         return self.lastIndex
 
     #Toggles between hover and item level
-    def pickToggle(self, itemHeight=-45, dropHeight=12, wait = True):
+    def pickToggle(self, itemHeight=-40, dropHeight=12, wait = True):
         lastIndex = 0
         self.dropHeight = dropHeight
         positions = self.getPosition()
