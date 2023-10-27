@@ -8,7 +8,7 @@ from serial.tools import list_ports
 from abc import ABC, abstractmethod
 from ObjectDetection import *
 import tkinter as tk
-from userColorSelector import select_color
+from userColorSelector import selectColor
 
 
 def main():
@@ -35,14 +35,14 @@ def main():
 
         match roboticState:
             case 'initialize':
-                port = port_selection()
+                port = portSelection()
                 homeCoordinates = (5, 135, 60)
                 ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = False) #Create DoBot Class Object with home position x,y,z
                 ctrlBot.moveArmRelXY(0, 0, wait=True) #deze slaat hij voor een of andere manier over
                 roboticState = 'pickUpPosition'
 
             case 'userColorChoice':
-                userChoice = select_color(colorList)
+                userChoice = selectColor(colorList)
                 print(userChoice)
                 match userChoice:
                     case 'Blue':
