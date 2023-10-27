@@ -1,6 +1,6 @@
 import tkinter as tk
 
-def selectColor(colorList):
+def SelectColor(colorList):
     # Define the list of color names
 
     # Define a dictionary to map color names to their corresponding color codes
