@@ -3,8 +3,9 @@ import numpy as np
 from ColorRecognition import *
 
 def ObjectDetection(vidCapture):
-    frameWidth = int(vidCapture.get(3))
-    frameHeight = int(vidCapture.get(4))
+    _ , frameWidth, _ = vidCapture.shape
+     
+
 
     colorList = [
         ["yellow",  [18, 160, 0], [39, 255, 255]],
