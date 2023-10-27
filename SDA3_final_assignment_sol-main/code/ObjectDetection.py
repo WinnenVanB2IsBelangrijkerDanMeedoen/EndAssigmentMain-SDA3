@@ -80,8 +80,10 @@ def ObjectDetection(vidCapture):
         #Calculate contour center
         frameSize = (frame.shape[1], frame.shape[0])
         borderMargin = 10
+    centerList=[]
     for contour in contoursresult:
         area = cv2.contourArea(contour)
+        print (area)
         if 5000 > area > 400:
             if len(contour) > 0:
                 x, y = contour[0][0]
@@ -91,14 +93,13 @@ def ObjectDetection(vidCapture):
                     if moment["m00"] != 0:
                         cX = int(moment["m10"]/moment["m00"]) #center X coordinate
                         cY = int(moment["m01"]/moment["m00"]) #center Y coordinate
-
                     else:
                         cX, cY = 0, 0          
-                    colorName = PixelHsvColor(frame, cY, cX, colorList)
-                    print(colorName)          
-                    cv2.circle(image_copyresult, (cX, cY), 5, (0, 255, 255), -1)
-                    cv2.putText(image_copyresult, colorName, (cX -25, cY -35), cv2.FONT_HERSHEY_DUPLEX, 0.4, (0, 255, 0), 1)
-                    centerList = [[colorName, (cX, cY)]]
+                colorName = PixelHsvColor(frame, cY, cX, colorList)
+                print(colorName)          
+            cv2.circle(image_copyresult, (cX, cY), 5, (0, 255, 255), -1)
+            cv2.putText(image_copyresult, colorName, (cX -25, cY -35), cv2.FONT_HERSHEY_DUPLEX, 0.4, (0, 255, 0), 1)
+            #centerList.append(colorName, (cX,cY))
     cv2.drawContours(image=image_copyresult, contours=contoursresult, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
     return centerList, image_copyresult
     #cv2.imshow('reuslt2HSV', resultBlueGreenRedYellow)
