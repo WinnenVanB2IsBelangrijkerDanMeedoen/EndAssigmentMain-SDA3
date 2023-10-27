@@ -1,42 +1,87 @@
+from LoadingRobot import *
+import time
+import os
+import keyboard
+import threading
+from DoBotArm import DoBotArm as Dbt
 from serial.tools import list_ports
 from abc import ABC, abstractmethod
 from ObjectDetection import *
 import tkinter as tk
 from userColorSelector import select_color
 
+
 def main():
+    os.chdir(path= 'SDA3_final_assignment_sol-main/code/DoBotArm') 
+    # position = ctrlBot.getPosition()
+    # print("Current Location Nozzle: ", position[0], position[1], position[2])
+    # homing_prompt()
+    # time.sleep(2)
+    # ctrlBot.moveArmRelXY(0,100,wait=False)
+    # print(ctrlBot.getPosition())
+    # if homing_prompt():
     #     Dbt.moveHome()
+
+
     roboticState = 'userColorChoice'
     colorList = [("Blue"), ("Red"), ("Yellow"), ("Green")]
     centerList = []
+
     centerList.append(("Blue(B)", (30,60)))
     centerList.append(("Red(R)", (70,140)))
     centerList.append(("Yellow(G)", (200,400)))
 
     while True:
-        roboticState = 'pickUpPosition'
-        case 'userColorChoice':
-            userChoice = select_color(colorList)
-            print(userChoice)
-            match userChoice:
-                case 'Blue':
-                    pass
-                
-                case 'Green':
-                    pass
-                
-                case 'Red':
-                    pass
-                
-                case 'Yellow':
-                    pass
-                
-                case 'pickUp':
-                    ctrlBot.pickToggle()
-                    ctrlBot.moveArmXYZ(105,145,60, wait = True)
-                    ctrlBot.SetConveyor(enabled=False)
-                    roboticState = 'pickUp'
+
+        match roboticState:
+            case 'initialize':
+                port = port_selection()
+                homeCoordinates = (5, 135, 60)
+                ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
+                ctrlBot.moveArmRelXY(0, 0, wait=True) #deze slaat hij voor een of andere manier over
+                roboticState = 'pickUpPosition'
+
+            case 'userColorChoice':
+                userChoice = select_color(colorList)
+                print(userChoice)
+                match userChoice:
+                    case 'Blue':
+                        pass
+
+                    case 'Green':
+                        pass
+
+                    case 'Red':
+                        pass
+
+                    case 'Yellow':
+                        pass
+
+            case 'pickUp':
+                ctrlBot.pickToggle()
+                roboticState = 'dropPosition'
+
+            case 'drop':
+                ctrlBot.pickToggle()
+                roboticState = 'pickUpPosition'
+
+            case 'dropPosition':
+                ctrlBot.moveHome()
+                roboticState = 'drop'
+
+            case 'pickUpPosition':
+                ctrlBot.SetConveyor(enabled=True)
+                ctrlBot.moveArmXYZ(105,145,60, wait = True)
+                ctrlBot.SetConveyor(enabled=False)
+                roboticState = 'pickUp'
         #print(ctrlBot.getPosition())
         if keyboard.is_pressed("esc"):
             #ctrlBot.moveArmXYZ(z=60, wait=True)
             ctrlBot.SetConveyor(enabled=True)
+            break
+
+    
+        
+
+if __name__ == "__main__":
+    main()
