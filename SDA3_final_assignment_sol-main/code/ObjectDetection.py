@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 from ColorRecognition import *
 
-def ObjectDetection(vidCapture):
-    _ , frameWidth, _ = vidCapture.shape
-     
+def ObjectDetection(frame):
+    frameinfo = frame.shape
+    _ , frameWidth, _ = frameinfo
 
 
     colorList = [
@@ -38,50 +38,49 @@ def ObjectDetection(vidCapture):
         image1[:,:,2] = (1 - (1 - alpha_foreground) * (1 - alpha_background)) * 255
         return image1
 
-    ret, frame = vidCapture.read()
-    if ret == True:
-        imageHSV = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
-        #Red detection
-        maskHSVRed = cv2.inRange(imageHSV, minHSVRed, maxHSVRed)
-        resultHSVRed = cv2.bitwise_and(frame, frame, mask = maskHSVRed)
-        #cv2.imshow('red', resultHSVRed)
-        #yellow detection
-        maskHSVYellow = cv2.inRange(imageHSV, minHSVYellow, maxHSVYellow)
-        resultHSVYellow = cv2.bitwise_and(frame, frame, mask = maskHSVYellow)
-        #cv2.imshow('geel', resultHSVYellow)
-        #green detection
-        maskHSVGreen = cv2.inRange(imageHSV, minHSVGreen, maxHSVGreen)
-        resultHSVGreen = cv2.bitwise_and(frame, frame, mask = maskHSVGreen)
-        #cv2.imshow('groen', resultHSVGreen)
-        #blue detection
-        maskHSVBlue = cv2.inRange(imageHSV, minHSVBlue, maxHSVBlue)
-        resultHSVBlue = cv2.bitwise_and(frame, frame, mask = maskHSVBlue)
-        #cv2.imshow('blauw', resultHSVBlue)
-        #merging images
-        resultBlueGreen = MergeImage(resultHSVBlue, resultHSVGreen)
-        #cv2.imshow('result blue green', resultBlueGreen)
-        resultBlueGreenRed = MergeImage(resultBlueGreen, resultHSVRed)
-        resultBlueGreenRedYellow = MergeImage(resultBlueGreenRed, resultHSVYellow)
-        resultBGR = cv2.cvtColor(resultBlueGreenRedYellow, cv2.COLOR_HSV2BGR)
-        #cv2.imshow('BGR', resultBGR)
-        resultGrey = cv2.cvtColor(resultBGR, cv2.COLOR_BGR2GRAY)
-        #cv2.imshow('GRey', resultGrey)
-        red, resultWhiteBlack = cv2.threshold(resultGrey, 127, 255, 0)
-        #cv2.imshow('resultBlackWhite', resultWhiteBlack)
-        #greyscale
-        edged = cv2.Canny(resultBlueGreenRedYellow, 30, 100)
-        retGreyresult, _ = cv2.threshold(resultBlueGreenRedYellow, 127, 255, cv2.THRESH_BINARY)
 
-        #cv2.imshow('edged', edged)
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-        dilate = cv2.dilate(edged, kernel, iterations=1) # zorgt ervoor dat er verbindgen zijn tussen de randen
-        #find countours
-        contoursresult, _ = cv2.findContours(image = dilate, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
-        image_copyresult = frame.copy()
-        #Calculate contour center
-        frameSize = (frame.shape[1], frame.shape[0])
-        borderMargin = 10
-    centerList=[]
+    imageHSV = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+    #Red detection
+    maskHSVRed = cv2.inRange(imageHSV, minHSVRed, maxHSVRed)
+    resultHSVRed = cv2.bitwise_and(frame, frame, mask = maskHSVRed)
+    #cv2.imshow('red', resultHSVRed)
+    #yellow detection
+    maskHSVYellow = cv2.inRange(imageHSV, minHSVYellow, maxHSVYellow)
+    resultHSVYellow = cv2.bitwise_and(frame, frame, mask = maskHSVYellow)
+    #cv2.imshow('geel', resultHSVYellow)
+    #green detection
+    maskHSVGreen = cv2.inRange(imageHSV, minHSVGreen, maxHSVGreen)
+    resultHSVGreen = cv2.bitwise_and(frame, frame, mask = maskHSVGreen)
+    #cv2.imshow('groen', resultHSVGreen)
+    #blue detection
+    maskHSVBlue = cv2.inRange(imageHSV, minHSVBlue, maxHSVBlue)
+    resultHSVBlue = cv2.bitwise_and(frame, frame, mask = maskHSVBlue)
+    #cv2.imshow('blauw', resultHSVBlue)
+    #merging images
+    resultBlueGreen = MergeImage(resultHSVBlue, resultHSVGreen)
+    #cv2.imshow('result blue green', resultBlueGreen)
+    resultBlueGreenRed = MergeImage(resultBlueGreen, resultHSVRed)
+    resultBlueGreenRedYellow = MergeImage(resultBlueGreenRed, resultHSVYellow)
+    resultBGR = cv2.cvtColor(resultBlueGreenRedYellow, cv2.COLOR_HSV2BGR)
+    #cv2.imshow('BGR', resultBGR)
+    resultGrey = cv2.cvtColor(resultBGR, cv2.COLOR_BGR2GRAY)
+    #cv2.imshow('GRey', resultGrey)
+    red, resultWhiteBlack = cv2.threshold(resultGrey, 127, 255, 0)
+    #cv2.imshow('resultBlackWhite', resultWhiteBlack)
+    #greyscale
+    edged = cv2.Canny(resultBlueGreenRedYellow, 30, 100)
+    retGreyresult, _ = cv2.threshold(resultBlueGreenRedYellow, 127, 255, cv2.THRESH_BINARY)
+    #cv2.imshow('edged', edged)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    dilate = cv2.dilate(edged, kernel, iterations=1) # zorgt ervoor dat er verbindgen zijn tussen de randen
+    #find countours
+    contoursresult, _ = cv2.findContours(image = dilate, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
+    image_copyresult = frame.copy()
+    #Calculate contour center
+    frameSize = (frame.shape[1], frame.shape[0])
+    borderMargin = 10
+    centerObjectList=[]
+    colorObjectList =[]
     for contour in contoursresult:
         area = cv2.contourArea(contour)
         if 5000 > area > 400:
@@ -96,10 +95,10 @@ def ObjectDetection(vidCapture):
                     else:
                         cX, cY = 0, 0          
                 colorName = PixelHsvColor(frame, cY, cX, colorList)
-                print(colorName)          
             cv2.circle(image_copyresult, (cX, cY), 5, (0, 255, 255), -1)
             cv2.putText(image_copyresult, colorName, (cX -25, cY -35), cv2.FONT_HERSHEY_DUPLEX, 0.4, (0, 255, 0), 1)
-            #centerList.append(colorName, (cX,cY))
+            print(colorName)
+            centerObjectList.append((cX,cY))
+            colorObjectList.append(colorName)
             cv2.drawContours(image=image_copyresult, contours=contour, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
-    return centerList, image_copyresult
-    #cv2.imshow('reuslt2HSV', resultBlueGreenRedYellow)
+    return centerObjectList, colorObjectList, image_copyresult
