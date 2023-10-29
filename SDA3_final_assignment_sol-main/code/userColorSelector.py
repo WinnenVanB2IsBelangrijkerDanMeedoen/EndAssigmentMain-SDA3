@@ -46,5 +46,5 @@ def SelectColor(colorList):
     return selectedColor.get()
 
 if __name__ == "__main__":
-    selectedColor = selectColor()
+    selectedColor = SelectColor()
     print("Selected color:", selectedColor)
