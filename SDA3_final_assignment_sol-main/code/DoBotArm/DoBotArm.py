@@ -173,6 +173,7 @@ class DoBotArm:
         else:
             self.moveArmXYZ(None, None, itemHeight, wait)
             self.picking = True
+            
         self.toggleSuction()
         #if(wait):
         #    self.commandDelay(self.lastIndex)

@@ -6,11 +6,12 @@ import cv2
 
 class LoadingRobot(RoboticArm):
     def __init__(self, ctrlBot = None, homeCoordinates = (None, None, None)):
-        super().__init__()
+        print("innit")
+        super().__init__(homeCoordinates)
         
     def Initialize(self):
-        ctrlBot = self.ctrlBot
-        return ctrlBot
+        print("initialize")
+        return self.ctrlBot
     
     def TrimFrame():
         resizedFrame = ResizeFrame()
