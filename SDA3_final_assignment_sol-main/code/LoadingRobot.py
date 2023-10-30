@@ -1,6 +1,7 @@
 from RoboticArm import *
 from ObjectDetection import*
 from ResizeFrame import *
+from CoordinateCalculation import CoordinateCalculation
 import cv2
 
 class LoadingRobot(RoboticArm):
@@ -15,6 +16,7 @@ class LoadingRobot(RoboticArm):
     def TrimFrame():
         resizedFrame = ResizeFrame()
         return resizedFrame
+    
     def PickUp():
         pass
 
@@ -24,13 +26,14 @@ class LoadingRobot(RoboticArm):
         pass
 
     def PickupPlaceDetection(resizedFrame):
-        centerArr, colorArr, frame = ObjectDetection(resizedFrame)
+        centerList, colorList, frame = ObjectDetection(resizedFrame)
         cv2.imshow("Videofeed", frame)
-        print(centerArr)
-        print(colorArr)
+        print(centerList)
+        print(colorList)
 
-    def CoordinateCalculation():
-        pass
+    def CoordinateCalculation(centerList):
+        RobotCoordinateCenterList = CoordinateCalculation(centerList)
+        return RobotCoordinateCenterList
     
 #frame = LoadingRobot.TrimFrame()
 #LoadingRobot.PickupPlaceDetection(frame)
