@@ -36,14 +36,14 @@ def main():
         match roboticState:
             case 'initialize':
                 port = portSelection()
-                homeCoordinates = (5, 135, 60)
-                ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = False) #Create DoBot Class Object with home position x,y,z
+                homeCoordinates = (5, 160, 60)
+                ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
                 ctrlBot.moveArmRelXY(0, 0, wait=True) #deze slaat hij voor een of andere manier over
 
                 #Resize Frame and detect cosntours
                 resizedFrame = LoadingRobot.TrimFrame()
                 LoadingRobot.PickupPlaceDetection(resizedFrame)
-                roboticState = 'userColorChoice'
+                roboticState = 'pickUpPosition'
 
             case 'userColorChoice':
                 userChoice = SelectColor(colorList)
@@ -75,7 +75,7 @@ def main():
 
             case 'pickUpPosition':
                 ctrlBot.SetConveyor(enabled=True)
-                ctrlBot.moveArmXYZ(128,-254,-20, wait = True)
+                ctrlBot.moveArmXYZ(105,160,60, wait = True)
                 ctrlBot.SetConveyor(enabled=False)
                 roboticState = 'pickUp'
         #print(ctrlBot.getPosition())
