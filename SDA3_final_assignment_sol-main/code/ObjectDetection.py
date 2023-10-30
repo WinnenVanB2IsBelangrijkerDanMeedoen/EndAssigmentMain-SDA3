@@ -9,7 +9,7 @@ def ObjectDetection(frame):
 
     colorList = [
         ["Yellow",  [18, 160, 0], [39, 255, 255]],
-        ["Red",     [170, 150, 0], [180, 255, 255]],
+        ["Red",     [120, 100, 0], [225, 255, 255]],
         ["Green",   [43, 79, 0], [84, 255, 255]],
         ["Blue",    [100, 90, 0], [162, 255, 255]], 
     ]
@@ -18,8 +18,8 @@ def ObjectDetection(frame):
     minHSVYellow = np.array([18, 160, 0])
     maxHSVYellow = np.array([39, 255, 255])
     #Red
-    minHSVRed = np.array([170, 150, 0])
-    maxHSVRed = np.array([180, 255, 255])
+    minHSVRed = np.array([0, 0, 0])
+    maxHSVRed = np.array([225, 255, 255])
     #green
     minHSVGreen = np.array([43, 79, 0])
     maxHSVGreen = np.array([84, 255, 255])
@@ -65,7 +65,8 @@ def ObjectDetection(frame):
     #cv2.imshow('BGR', resultBGR)
     resultGrey = cv2.cvtColor(resultBGR, cv2.COLOR_BGR2GRAY)
     #cv2.imshow('GRey', resultGrey)
-    red, resultWhiteBlack = cv2.threshold(resultGrey, 127, 255, 0)
+    cv2.imshow('result grey', resultGrey)
+    red, resultWhiteBlack = cv2.threshold(resultGrey, 20, 255, 0)
     #cv2.imshow('resultBlackWhite', resultWhiteBlack)
     #greyscale
     edged = cv2.Canny(resultBlueGreenRedYellow, 30, 100)
@@ -100,5 +101,5 @@ def ObjectDetection(frame):
             print(colorName)
             centerObjectList.append((cX,cY))
             colorObjectList.append(colorName)
-            cv2.drawContours(image=image_copyresult, contours=contour, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+            cv2.drawContours(image=image_copyresult, contours=[contour], contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
     return centerObjectList, colorObjectList, image_copyresult
