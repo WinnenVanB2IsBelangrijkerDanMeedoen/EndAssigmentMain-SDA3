@@ -25,7 +25,7 @@ def homingPrompt():
             print("Unrecognised response")
 
 class RoboticArm(ABC):
-    def __init__(self, ctrlBot, homeCoordinates):
+    def __init__(self, ctrlBot, homeCoordinates, dropCoordinates):
         pass
 
     @abstractmethod
@@ -42,7 +42,6 @@ class RoboticArm(ABC):
     
 
     def PickUpPlaceDetection(self, resizedFrame):
-        vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
         self.centerList, frame = ObjectDetection(resizedFrame)
         cv2.imshow("VideoFeed", frame)
         
