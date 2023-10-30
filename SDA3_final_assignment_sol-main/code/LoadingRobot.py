@@ -6,15 +6,19 @@ import cv2
 class LoadingRobot(RoboticArm):
     def __init__(self, ctrlBot = None, homeCoordinates = (None, None, None)):
         super().__init__()
+        
+    def Initialize(self):
+        ctrlBot = self.ctrlBot
+        return ctrlBot
     
     def TrimFrame():
         resizedFrame = ResizeFrame()
         return resizedFrame
+    
     def PickUp():
         pass
 
     def PlaceDown():
-        5, 145, 12
         pass
     def ConveyorBelt():
         pass

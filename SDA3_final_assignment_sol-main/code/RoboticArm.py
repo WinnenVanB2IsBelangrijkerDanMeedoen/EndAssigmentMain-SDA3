@@ -25,8 +25,12 @@ def homingPrompt():
             print("Unrecognised response")
 
 class RoboticArm(ABC):
-    def __init__(self, ctrlBot, homeCoordinates, dropCoordinates):
-        pass
+    def __init__(self, homeCoordinates):
+        if homeCoordinates != (None, None, None):
+            print("Connecting...")
+            port = portSelection()
+            self.ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
+
 
     @abstractmethod
     def PickUp():
@@ -39,10 +43,14 @@ class RoboticArm(ABC):
     @abstractmethod
     def ConveyorBelt():
         raise NotImplementedError
-
-    def PickUpPlaceDetection(self, resizedFrame):
-        self.centerList, frame = ObjectDetection(resizedFrame)
-        cv2.imshow("VideoFeed", frame)
+    
+    @abstractmethod
+    def PickUpPlaceDetection():
+        raise NotImplementedError
+    
+    @abstractmethod
+    def TrimFrame():
+        raise NotImplementedError
 
     @abstractmethod
     def CoordinateCalculation():
