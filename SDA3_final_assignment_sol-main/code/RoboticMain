@@ -26,6 +26,8 @@ def main():
     roboticState = 'initialize'
     colorList = [("Blue"), ("Red"), ("Yellow"), ("Green")]
     centerList = []
+    enableConveyor = False
+    previousConveyorTime = 0
 
     centerList.append(("Blue(B)", (30,60)))
     centerList.append(("Red(R)", (70,140)))
@@ -36,13 +38,15 @@ def main():
         match roboticState:
             case 'initialize':
                 port = portSelection()
-                homeCoordinates = (5, 160, 60)
-                ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
+                homeCoordinatesLoadingRobot = (5, 210, 60)
+                ctrlBot = Dbt.DoBotArm(port, homeCoordinatesLoadingRobot[0], homeCoordinatesLoadingRobot[1], homeCoordinatesLoadingRobot[2], home = True) #Create DoBot Class Object with home position x,y,z
+                #ctrlBot = LoadingRobot.Initialize(homeCoordinates= homeCoordinatesLoadingRobot)
                 ctrlBot.moveArmRelXY(0, 0, wait=True) #deze slaat hij voor een of andere manier over
 
                 #Resize Frame and detect cosntours
-                resizedFrame = LoadingRobot.TrimFrame()
-                LoadingRobot.PickupPlaceDetection(resizedFrame)
+                #resizedFrame = LoadingRobot.TrimFrame()
+                #LoadingRobot.PickupPlaceDetection(resizedFrame)
+                print("done initializing")
                 roboticState = 'pickUpPosition'
 
             case 'userColorChoice':
@@ -63,6 +67,8 @@ def main():
 
             case 'pickUp':
                 ctrlBot.pickToggle()
+                ctrlBot.SetConveyor(enabled=False)
+                ctrlBot.moveArmXYZ(None, None, 60, wait = False)
                 roboticState = 'dropPosition'
 
             case 'drop':
@@ -74,14 +80,23 @@ def main():
                 roboticState = 'drop'
 
             case 'pickUpPosition':
+                ctrlBot.moveArmXYZ(145,215,60, jump = True, wait = True)
                 ctrlBot.SetConveyor(enabled=True)
-                ctrlBot.moveArmXYZ(105,160,60, wait = True)
-                ctrlBot.SetConveyor(enabled=False)
                 roboticState = 'pickUp'
         #print(ctrlBot.getPosition())
+
+        # if(enableConveyor):
+        #     ctrlBot.SetConveyor(enabled=True)
+        #     if(time.time() - previousConveyorTime > 2.7):
+        #         ctrlBot.SetConveyor(enabled=False)
+        #         enableConveyor = False
+            
+
+        print("current:", time.time(), '\t', "previous:", previousConveyorTime, '\t', "conveyor status:", enableConveyor)
+
         if keyboard.is_pressed("esc"):
             #ctrlBot.moveArmXYZ(z=60, wait=True)
-            ctrlBot.SetConveyor(enabled=True)
+            ctrlBot.SetConveyor(enabled=False)
             break
 
     

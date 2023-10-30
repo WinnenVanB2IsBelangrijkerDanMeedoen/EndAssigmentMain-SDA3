@@ -31,7 +31,6 @@ class RoboticArm(ABC):
             port = portSelection()
             self.ctrlBot = Dbt.DoBotArm(port, homeCoordinates[0], homeCoordinates[1], homeCoordinates[2], home = True) #Create DoBot Class Object with home position x,y,z
 
-
     @abstractmethod
     def PickUp():
         raise NotImplementedError
