@@ -2,9 +2,13 @@
 
 
 
-def CoordinateCalculation(centerCoordinatesArray):
-    centerCoordinate
-    for centerCoordinate in centerCoordinatesArray:
+def CoordinateCalculation(centerCoordinatesList):
+    for centerCoordinate in centerCoordinatesList:
         print(centerCoordinate)
 
-centerCoordinatesArray 
+centerCoordinatesList = [
+    [(25, 30)],
+    [(59, 123)],
+    [(250, 12)]
+]
+CoordinateCalculation(centerCoordinatesList)
