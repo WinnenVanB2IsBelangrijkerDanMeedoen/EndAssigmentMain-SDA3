@@ -30,8 +30,9 @@ class LoadingRobot(RoboticArm):
         print(centerList)
         print(colorList)
 
-    def CoordinateCalculation():
-        pass
+    def CoordinateCalculation(centerList):
+        RobotCoordinateCenterList = CoordinateCalculation(centerList)
+        return RobotCoordinateCenterList
     
 #frame = LoadingRobot.TrimFrame()
 #LoadingRobot.PickupPlaceDetection(frame)
