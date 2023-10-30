@@ -39,12 +39,10 @@ class RoboticArm(ABC):
     @abstractmethod
     def ConveyorBelt():
         raise NotImplementedError
-    
 
     def PickUpPlaceDetection(self, resizedFrame):
         self.centerList, frame = ObjectDetection(resizedFrame)
         cv2.imshow("VideoFeed", frame)
-        
 
     @abstractmethod
     def CoordinateCalculation():
