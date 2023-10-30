@@ -8,7 +8,7 @@ from serial.tools import list_ports
 from abc import ABC, abstractmethod
 from ObjectDetection import *
 import tkinter as tk
-from userColorSelector import SelectColor
+
 
 
 def main():
@@ -24,15 +24,15 @@ def main():
 
 
     roboticState = 'initialize'
-    colorList = [("Blue"), ("Red"), ("Yellow"), ("Green")]
-    centerList = []
-    enableConveyor = False
-    previousConveyorTime = 0
+    # colorList = [("Blue"), ("Red"), ("Yellow"), ("Green")]
+    # centerList = []
+    userCoordinates = (145,215)
 
-    centerList.append(("Blue(B)", (30,60)))
-    centerList.append(("Red(R)", (70,140)))
-    centerList.append(("Yellow(G)", (200,400)))
+    # centerList.append(("Blue(B)", (30,60)))
+    # centerList.append(("Red(R)", (70,140)))
+    # centerList.append(("Yellow(G)", (200,400)))
 
+    
     while True:
 
         match roboticState:
@@ -40,49 +40,38 @@ def main():
                 port = portSelection()
                 homeCoordinatesLoadingRobot = (5, 210, 60)
                 ctrlBot = Dbt.DoBotArm(port, homeCoordinatesLoadingRobot[0], homeCoordinatesLoadingRobot[1], homeCoordinatesLoadingRobot[2], home = True) #Create DoBot Class Object with home position x,y,z
-                #ctrlBot = LoadingRobot.Initialize(homeCoordinates= homeCoordinatesLoadingRobot)
+                loadingBot = LoadingRobot(ctrlBot)
+                # ctrlBot = LoadingRobot.Initialize(homeCoordinates= homeCoordinatesLoadingRobot)
                 ctrlBot.moveArmRelXY(0, 0, wait=True) #deze slaat hij voor een of andere manier over
 
                 #Resize Frame and detect cosntours
                 #resizedFrame = LoadingRobot.TrimFrame()
                 #LoadingRobot.PickupPlaceDetection(resizedFrame)
+                loadingBot.TrimFrame()
+                loadingBot.PickupPlaceDetection()
+                loadingBot.CoordinateCalculation()
+
                 print("done initializing")
-                roboticState = 'pickUpPosition'
+                roboticState = 'userColorChoice'
 
             case 'userColorChoice':
-                userChoice = SelectColor(colorList)
-                print(userChoice)
-                match userChoice:
-                    case 'Blue':
-                        pass
-
-                    case 'Green':
-                        pass
-
-                    case 'Red':
-                        pass
-
-                    case 'Yellow':
-                        pass
+                userCoordinates = loadingBot.UserChoice()
+                roboticState = 'pickUp'
 
             case 'pickUp':
-                ctrlBot.pickToggle()
-                ctrlBot.SetConveyor(enabled=False)
-                ctrlBot.moveArmXYZ(None, None, 60, wait = False)
-                roboticState = 'dropPosition'
+                loadingBot.PickUp(userCoordinates)
+                roboticState = 'placeDown'
 
-            case 'drop':
-                ctrlBot.pickToggle()
-                roboticState = 'pickUpPosition'
+            case 'placeDown':
+                loadingBot.PlaceDown()
+                roboticState = 'retakePhoto'
 
-            case 'dropPosition':
-                ctrlBot.moveHome()
-                roboticState = 'drop'
+            case 'retakePhoto':
+                loadingBot.RetakePhoto()
+                loadingBot.PickupPlaceDetection()
+                loadingBot.CoordinateCalculation()
+                roboticState = 'userColorChoice'
 
-            case 'pickUpPosition':
-                ctrlBot.moveArmXYZ(145,215,60, jump = True, wait = True)
-                ctrlBot.SetConveyor(enabled=True)
-                roboticState = 'pickUp'
         #print(ctrlBot.getPosition())
 
         # if(enableConveyor):
@@ -92,7 +81,7 @@ def main():
         #         enableConveyor = False
             
 
-        print("current:", time.time(), '\t', "previous:", previousConveyorTime, '\t', "conveyor status:", enableConveyor)
+        #print("current:", time.time(), '\t', "previous:", previousConveyorTime, '\t', "conveyor status:", enableConveyor)
 
         if keyboard.is_pressed("esc"):
             #ctrlBot.moveArmXYZ(z=60, wait=True)

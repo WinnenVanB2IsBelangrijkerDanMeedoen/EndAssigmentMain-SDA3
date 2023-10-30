@@ -5,15 +5,16 @@ def SelectColor(colorList):
 
     # Define a dictionary to map color names to their corresponding color codes
     colorMapping = {
-        "Red": "red",
-        "Blue": "blue",
-        "Yellow": "yellow",
-        "Green": "green"
+        "Red": "Red",
+        "Blue": "Blue",
+        "Yellow": "Yellow",
+        "Green": "Green"
     }
 
     # Function to handle button click
     def onButtonClick(selectedColor):
-        selectedColor.set(selectedColor)
+        selectedColorVar.set(selectedColor)
+        root.destroy()
         root.quit()  # Close the app
 
     # Create the main application window
@@ -21,8 +22,8 @@ def SelectColor(colorList):
     root.title("Color Selector")
 
     # Create a StringVar to store the selected color
-    selectedColor = tk.StringVar()
-    selectedColor.set("")
+    selectedColorVar = tk.StringVar()
+    selectedColorVar.set("")
 
     # Create buttons for each color in the colorList list
     for selectedColor in colorList:
@@ -43,8 +44,10 @@ def SelectColor(colorList):
     root.mainloop()
 
     # When the GUI event loop ends, return the selected color
-    return selectedColor.get()
+    return selectedColorVar.get()
 
 if __name__ == "__main__":
-    selectedColor = SelectColor()
-    print("Selected color:", selectedColor)
+    while True:
+        colorList = ["Blue","Yellow", "Red", "Green"]
+        selectedColor = SelectColor(colorList)
+        print("Selected color:", selectedColor)

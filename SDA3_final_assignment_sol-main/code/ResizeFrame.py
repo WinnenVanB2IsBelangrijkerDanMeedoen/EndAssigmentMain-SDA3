@@ -31,10 +31,11 @@ def ResizeFrame():
             cv2.imshow("ResizeFrame", frame)
             key = cv2.waitKey(20)
             if key == ord("q"):
+                print(xMin,":",xMax, '\t', yMin,":",yMax)
                 cv2. destroyWindow("ResizeFrame")
                 cv2. destroyWindow("SliderWindow")
                 break
         else:
             break
-    return frame
+    return frame, (xMin,xMax, yMin, yMax)
 

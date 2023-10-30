@@ -21,19 +21,25 @@ def main():
     ctrlBot.moveArmRelXY(0, 0, wait = True) #deze slaat hij voor een of andere manier over
 
     while True:
-        if keyboard.is_pressed("w"):
-            ctrlBot.moveArmRelXY(-5, 0)
-        if keyboard.is_pressed("s"):
-            ctrlBot.moveArmRelXY(5, 0)
-        if keyboard.is_pressed("a"):
-            ctrlBot.moveArmRelXY(0, -5)
-        if keyboard.is_pressed("d"):
-            ctrlBot.moveArmRelXY(0, 5)
-        if keyboard.is_pressed("c"):
-            ctrlBot.moveArmRelXYZ(0, 0, -5)
-        if keyboard.is_pressed("x"):
-            ctrlBot.moveArmRelXYZ(0, 0, 5)
-        print(ctrlBot.getPosition())
+        userX = input("x value:")
+        userY = input("y value:")
+        userX = int(userX)
+        userY = int(userY)
+        print(userX, userY)
+        ctrlBot.moveArmXY(userX,userY, wait = True)
+        # if keyboard.is_pressed("w"):
+        #     ctrlBot.moveArmRelXY(-5, 0)
+        # if keyboard.is_pressed("s"):
+        #     ctrlBot.moveArmRelXY(5, 0)
+        # if keyboard.is_pressed("a"):
+        #     ctrlBot.moveArmRelXY(0, -5)
+        # if keyboard.is_pressed("d"):
+        #     ctrlBot.moveArmRelXY(0, 5)
+        # if keyboard.is_pressed("c"):
+        #     ctrlBot.moveArmRelXYZ(0, 0, -5)
+        # if keyboard.is_pressed("x"):
+        #     ctrlBot.moveArmRelXYZ(0, 0, 5)
+        # print(ctrlBot.getPosition())
 
 if(__name__ == '__main__'):
     main()

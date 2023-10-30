@@ -2,38 +2,60 @@ from RoboticArm import *
 from ObjectDetection import*
 from ResizeFrame import *
 from CoordinateCalculation import CoordinateCalculation
+from userColorSelector import SelectColor
 import cv2
 
 class LoadingRobot(RoboticArm):
-    def __init__(self, ctrlBot = None, homeCoordinates = (None, None, None)):
+    def __init__(self, ctrlBot):
+        self.ctrlBot = ctrlBot
         print("innit")
-        super().__init__(homeCoordinates)
         
     def Initialize(self):
         print("initialize")
         return self.ctrlBot
     
-    def TrimFrame():
-        resizedFrame = ResizeFrame()
-        return resizedFrame
+    def TrimFrame(self):
+        self.resizedFrame, self.resizeValues = ResizeFrame()
     
-    def PickUp():
-        pass
+    def PickUp(self, userCoordinates, defaultPickUpLocation = (145,215,60)):
+        self.ctrlBot.moveArmXYZ(defaultPickUpLocation[0],defaultPickUpLocation[1],defaultPickUpLocation[2], jump = True, wait = True)
+        self.ctrlBot.moveArmXY(userCoordinates[0], userCoordinates[1], wait = True)
+        self.ctrlBot.SetConveyor(enabled=True)
+        
+        self.ctrlBot.pickToggle()
+        self.ctrlBot.SetConveyor(enabled=False)
+        self.ctrlBot.moveArmXYZ(None, None, 60, wait = False)
 
-    def PlaceDown():
-        pass
+    def PlaceDown(self):
+        self.ctrlBot.moveHome()
+        self.ctrlBot.pickToggle()
+
     def ConveyorBelt():
         pass
 
-    def PickupPlaceDetection(resizedFrame):
-        centerList, colorList, frame = ObjectDetection(resizedFrame)
+    def PickupPlaceDetection(self):
+        self.centerList, self.colorList, frame = ObjectDetection(self.resizedFrame)
         cv2.imshow("Videofeed", frame)
-        print(centerList)
-        print(colorList)
+        print(self.centerList)
+        print(self.colorList)
 
-    def CoordinateCalculation(centerList):
-        RobotCoordinateCenterList = CoordinateCalculation(centerList)
-        return RobotCoordinateCenterList
+    def RetakePhoto(self):
+        vidCapture = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+        _, frame = vidCapture.read()
+        self.resizedFrame = frame[self.resizeValues[0]:self.resizeValues[1], self.resizeValues[2]:self.resizeValues[3]]
+
+    def UserChoice(self):
+        print("colorList:", self.colorList)        
+        userChoice = SelectColor(self.colorList)
+        print("userChoice:", userChoice)
+        objectNumber = self.colorList.index(userChoice)
+        print("index:", objectNumber)
+        print("coordinatelist:", self.RobotCoordinateCenterList)
+        return (self.RobotCoordinateCenterList[objectNumber])
+
+
+    def CoordinateCalculation(self):
+        self.RobotCoordinateCenterList = CoordinateCalculation(self.centerList)
     
 #frame = LoadingRobot.TrimFrame()
 #LoadingRobot.PickupPlaceDetection(frame)
