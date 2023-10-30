@@ -1,6 +1,7 @@
 from RoboticArm import *
 from ObjectDetection import*
 from ResizeFrame import *
+from CoordinateCalculation import CoordinateCalculation
 import cv2
 
 class LoadingRobot(RoboticArm):
