@@ -7,6 +7,9 @@ class LoadingRobot(RoboticArm):
     def __init__(self, ctrlBot = None, homeCoordinates = (None, None, None)):
         super().__init__()
         
+    def Initialize(self):
+        ctrlBot = self.ctrlBot
+        return ctrlBot
     
     def TrimFrame():
         resizedFrame = ResizeFrame()
