@@ -15,7 +15,6 @@ class LoadingRobot(RoboticArm):
         pass
 
     def PlaceDown():
-        5, 145, 12
         pass
     def ConveyorBelt():
         pass

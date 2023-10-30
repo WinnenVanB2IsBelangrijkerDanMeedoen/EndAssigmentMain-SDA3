@@ -25,7 +25,7 @@ def homingPrompt():
             print("Unrecognised response")
 
 class RoboticArm(ABC):
-    def __init__(self, ctrlBot, homeCoordinates):
+    def __init__(self, ctrlBot, homeCoordinates): #dropcoordinates
         pass
 
     @abstractmethod

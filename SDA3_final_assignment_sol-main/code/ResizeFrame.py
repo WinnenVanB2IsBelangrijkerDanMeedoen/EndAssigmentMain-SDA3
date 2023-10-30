@@ -1,7 +1,7 @@
 import cv2
  
 def ResizeFrame():
-    vidCapture = cv2.VideoCapture(2, cv2.CAP_DSHOW)
+    vidCapture = cv2.VideoCapture(1, cv2.CAP_DSHOW)
     frameWidth = int(vidCapture.get(3))
     frameHeight = int(vidCapture.get(4))
 
