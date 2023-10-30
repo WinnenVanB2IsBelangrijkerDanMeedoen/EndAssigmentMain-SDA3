@@ -14,6 +14,7 @@ class LoadingRobot(RoboticArm):
     def TrimFrame():
         resizedFrame = ResizeFrame()
         return resizedFrame
+    
     def PickUp():
         pass
 
