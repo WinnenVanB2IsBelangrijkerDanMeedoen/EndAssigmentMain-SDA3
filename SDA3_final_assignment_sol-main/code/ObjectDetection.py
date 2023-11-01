@@ -6,7 +6,6 @@ def ObjectDetection(frame):
     frameinfo = frame.shape
     _ , frameWidth, _ = frameinfo
 
-
     colorList = [
         ["Yellow",  [18, 160, 0], [39, 255, 255]],
         ["Red",     [120, 100, 0], [225, 255, 255]],
@@ -38,56 +37,41 @@ def ObjectDetection(frame):
         image1[:,:,2] = (1 - (1 - alpha_foreground) * (1 - alpha_background)) * 255
         return image1
 
-
+    #detect the collors with HSV so that the light intesenty has less of an inpact on the collor value
     imageHSV = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
     #Red detection
     maskHSVRed = cv2.inRange(imageHSV, minHSVRed, maxHSVRed)
     resultHSVRed = cv2.bitwise_and(frame, frame, mask = maskHSVRed)
-    #cv2.imshow('red', resultHSVRed)
     #yellow detection
     maskHSVYellow = cv2.inRange(imageHSV, minHSVYellow, maxHSVYellow)
     resultHSVYellow = cv2.bitwise_and(frame, frame, mask = maskHSVYellow)
-    #cv2.imshow('geel', resultHSVYellow)
     #green detection
     maskHSVGreen = cv2.inRange(imageHSV, minHSVGreen, maxHSVGreen)
     resultHSVGreen = cv2.bitwise_and(frame, frame, mask = maskHSVGreen)
-    #cv2.imshow('groen', resultHSVGreen)
     #blue detection
     maskHSVBlue = cv2.inRange(imageHSV, minHSVBlue, maxHSVBlue)
     resultHSVBlue = cv2.bitwise_and(frame, frame, mask = maskHSVBlue)
-    #cv2.imshow('blauw', resultHSVBlue)
+
     #merging images
     resultBlueGreen = MergeImage(resultHSVBlue, resultHSVGreen)
-    #cv2.imshow('result blue green', resultBlueGreen)
     resultBlueGreenRed = MergeImage(resultBlueGreen, resultHSVRed)
     resultBlueGreenRedYellow = MergeImage(resultBlueGreenRed, resultHSVYellow)
-    resultBGR = cv2.cvtColor(resultBlueGreenRedYellow, cv2.COLOR_HSV2BGR)
-    #cv2.imshow('BGR', resultBGR)
-    resultGrey = cv2.cvtColor(resultBGR, cv2.COLOR_BGR2GRAY)
-    #cv2.imshow('GRey', resultGrey)
-    cv2.imshow('result grey', resultGrey)
-    red, resultWhiteBlack = cv2.threshold(resultGrey, 20, 255, 0)
-    #cv2.imshow('resultBlackWhite', resultWhiteBlack)
-    #greyscale
-    edged = cv2.Canny(resultBlueGreenRedYellow, 30, 100)
-    retGreyresult, _ = cv2.threshold(resultBlueGreenRedYellow, 127, 255, cv2.THRESH_BINARY)
-    #cv2.imshow('edged', edged)
+    
+    edged = cv2.Canny(resultBlueGreenRedYellow, 30, 100) #create edges on image
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
     dilate = cv2.dilate(edged, kernel, iterations=1) # zorgt ervoor dat er verbindgen zijn tussen de randen
-    #find countours
     contoursresult, _ = cv2.findContours(image = dilate, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
-    image_copyresult = frame.copy()
+    contourImage = frame.copy()
     #Calculate contour center
-    frameSize = (frame.shape[1], frame.shape[0])
     borderMargin = 10
     centerObjectList=[]
     colorObjectList =[]
     for contour in contoursresult:
         area = cv2.contourArea(contour)
-        if 5000 > area > 400:
+        if 5000 > area > 400: #5000 is max area for an object and 400 is minimal area for object 
             if len(contour) > 0:
-                x, y = contour[0][0]
-                if borderMargin <= x < frameWidth - borderMargin:
+                x, _ = contour[0][0]
+                if borderMargin <= x < frameWidth - borderMargin: #removes the frame edge as an contour
                     moment = cv2.moments(contour)
                     #calculating centroid
                     if moment["m00"] != 0:
@@ -96,10 +80,9 @@ def ObjectDetection(frame):
                     else:
                         cX, cY = 0, 0          
                 colorName = PixelHsvColor(frame, cY, cX, colorList)
-            cv2.circle(image_copyresult, (cX, cY), 5, (0, 255, 255), -1)
-            cv2.putText(image_copyresult, colorName, (cX -25, cY -35), cv2.FONT_HERSHEY_DUPLEX, 0.4, (0, 255, 0), 1)
-            print(colorName)
+            cv2.circle(contourImage, (cX, cY), 5, (0, 255, 255), -1)
+            cv2.putText(contourImage, colorName, (cX -25, cY -35), cv2.FONT_HERSHEY_DUPLEX, 0.4, (0, 255, 0), 1)
             centerObjectList.append((cX,cY))
             colorObjectList.append(colorName)
-            cv2.drawContours(image=image_copyresult, contours=[contour], contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
-    return centerObjectList, colorObjectList, image_copyresult
+            cv2.drawContours(image=contourImage, contours=[contour], contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+    return centerObjectList, colorObjectList, contourImage

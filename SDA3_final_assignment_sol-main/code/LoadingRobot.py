@@ -35,27 +35,16 @@ class LoadingRobot(RoboticArm):
 
     def PickupPlaceDetection(self):
         self.centerList, self.colorList, frame = ObjectDetection(self.resizedFrame)
-        cv2.imshow("Videofeed", frame)
-        print(self.centerList)
-        print(self.colorList)
 
     def RetakePhoto(self):
         vidCapture = cv2.VideoCapture(1, cv2.CAP_DSHOW)
         _, frame = vidCapture.read()
         self.resizedFrame = frame[self.resizeValues[0]:self.resizeValues[1], self.resizeValues[2]:self.resizeValues[3]]
 
-    def UserChoice(self):
-        print("colorList:", self.colorList)        
+    def UserChoice(self):       
         userChoice = SelectColor(self.colorList)
-        print("userChoice:", userChoice)
         objectNumber = self.colorList.index(userChoice)
-        print("index:", objectNumber)
-        print("coordinatelist:", self.RobotCoordinateCenterList)
         return (self.RobotCoordinateCenterList[objectNumber])
-
 
     def CoordinateCalculation(self):
         self.RobotCoordinateCenterList = CoordinateCalculation(self.centerList)
-    
-#frame = LoadingRobot.TrimFrame()
-#LoadingRobot.PickupPlaceDetection(frame)
